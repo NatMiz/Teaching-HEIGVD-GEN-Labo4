@@ -22,7 +22,7 @@ public class JsonObject implements Serializable {
     }
 
     public void add(String key, Serializable value){
-        attributes.add(String.format(Locale.US,"%s", value.serialize()));
+        attributes.add(String.format("\"%s\": %s", key, value.serialize()));
     }
 
     public String serialize(){

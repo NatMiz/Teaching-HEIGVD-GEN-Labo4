@@ -10,14 +10,15 @@ public class OrdersWriter {
     }
 
     public String getContents() {
-        StringBuffer sb = new StringBuffer("{\"orders\": [");
+        JsonObject jsonRoot = new JsonObject();
+        JsonArray jsonOrders = new JsonArray();
 
         for (int i = 0; i < orders.getOrdersCount(); i++) {
             Order order = orders.getOrder(i);
-            sb.append("{");
-            sb.append(jsonKeyValue("id", order.getOrderId()));
-            sb.append(", ");
-            sb.append("\"products\": [");
+            JsonObject jsonOrder = new JsonObject();
+            JsonArray jsonProducts = new JsonArray();
+            jsonOrder.add("id", order.getOrderId());
+
             for (int j = 0; j < order.getProductsCount(); j++) {
                 Product product = order.getProduct(j);
                 JsonObject jsonProduct = new JsonObject();
@@ -32,23 +33,15 @@ public class OrdersWriter {
                 jsonProduct.add("price", product.getPrice());
 
                 jsonProduct.add("currency", product.getCurrency());
-                sb.append(jsonProduct.serialize());
-                sb.append(", ");
+                jsonProducts.add(jsonProduct);
             }
-
-            if (order.getProductsCount() > 0) {
-                sb.delete(sb.length() - 2, sb.length());
-            }
-
-            sb.append("]");
-            sb.append("}, ");
+            jsonOrder.add("products", jsonProducts);
+            jsonOrders.add(jsonOrder);
         }
 
-        if (orders.getOrdersCount() > 0) {
-            sb.delete(sb.length() - 2, sb.length());
-        }
+        jsonRoot.add("orders", jsonOrders);
 
-        return sb.append("]}").toString();
+        return jsonRoot.serialize();
     }
 
     private String getSizeFor(Product product) {
