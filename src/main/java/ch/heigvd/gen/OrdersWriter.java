@@ -1,5 +1,7 @@
 package ch.heigvd.gen;
 
+import java.util.Locale;
+
 public class OrdersWriter {
     private Orders orders;
 
@@ -13,33 +15,27 @@ public class OrdersWriter {
         for (int i = 0; i < orders.getOrdersCount(); i++) {
             Order order = orders.getOrder(i);
             sb.append("{");
-            sb.append("\"id\": ");
-            sb.append(order.getOrderId());
+            sb.append(jsonKeyValue("id", order.getOrderId()));
             sb.append(", ");
             sb.append("\"products\": [");
             for (int j = 0; j < order.getProductsCount(); j++) {
                 Product product = order.getProduct(j);
-
                 sb.append("{");
-                sb.append("\"code\": \"");
-                sb.append(product.getCode());
-                sb.append("\", ");
-                sb.append("\"color\": \"");
-                sb.append(getColorFor(product));
-                sb.append("\", ");
+                sb.append(jsonKeyValue("code", product.getCode()));
+                sb.append(", ");
+                sb.append(jsonKeyValue("color", getColorFor(product)));
+                sb.append(", ");
 
                 if (product.getSize() != Product.SIZE_NOT_APPLICABLE) {
-                    sb.append("\"size\": \"");
-                    sb.append(getSizeFor(product));
-                    sb.append("\", ");
+                    sb.append(jsonKeyValue("size", getSizeFor(product)));
+                    sb.append(", ");
                 }
 
-                sb.append("\"price\": ");
-                sb.append(product.getPrice());
+                sb.append(jsonKeyValue("price", product.getPrice()));
                 sb.append(", ");
-                sb.append("\"currency\": \"");
-                sb.append(product.getCurrency());
-                sb.append("\"}, ");
+                sb.append(jsonKeyValue("currency", product.getCurrency()));
+
+                sb.append("}, ");
             }
 
             if (order.getProductsCount() > 0) {
@@ -87,5 +83,18 @@ public class OrdersWriter {
             default:
                 return "no color";
         }
+    }
+
+    private String jsonKeyValue(String key, String value){
+        return String.format("\"%s\": \"%s\"", key, value);
+
+    }
+
+    private String jsonKeyValue(String key, int value){
+        return String.format("\"%s\": %d", key, value);
+    }
+
+    private String jsonKeyValue(String key, double value){
+        return String.format(Locale.US,"\"%s\": %s", key, value);
     }
 }
