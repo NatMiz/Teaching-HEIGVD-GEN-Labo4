@@ -1,0 +1,11 @@
+# Intellij files
+# User specific
+.idea/
+*.iml
+
+# Output folder
+out/
+target/
+
+# Maven
+*.jar
