@@ -20,22 +20,20 @@ public class OrdersWriter {
             sb.append("\"products\": [");
             for (int j = 0; j < order.getProductsCount(); j++) {
                 Product product = order.getProduct(j);
-                sb.append("{");
-                sb.append(jsonKeyValue("code", product.getCode()));
-                sb.append(", ");
-                sb.append(jsonKeyValue("color", getColorFor(product)));
-                sb.append(", ");
+                JsonObject jsonProduct = new JsonObject();
+
+                jsonProduct.add("code", product.getCode());
+                jsonProduct.add("color", getColorFor(product));
 
                 if (product.getSize() != Product.SIZE_NOT_APPLICABLE) {
-                    sb.append(jsonKeyValue("size", getSizeFor(product)));
-                    sb.append(", ");
+                    jsonProduct.add("size", getSizeFor(product));
                 }
 
-                sb.append(jsonKeyValue("price", product.getPrice()));
-                sb.append(", ");
-                sb.append(jsonKeyValue("currency", product.getCurrency()));
+                jsonProduct.add("price", product.getPrice());
 
-                sb.append("}, ");
+                jsonProduct.add("currency", product.getCurrency());
+                sb.append(jsonProduct.serialize());
+                sb.append(", ");
             }
 
             if (order.getProductsCount() > 0) {
