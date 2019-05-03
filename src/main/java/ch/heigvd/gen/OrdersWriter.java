@@ -1,7 +1,5 @@
 package ch.heigvd.gen;
 
-import java.util.Locale;
-
 public class OrdersWriter {
     private Orders orders;
 
@@ -24,10 +22,10 @@ public class OrdersWriter {
                 JsonObject jsonProduct = new JsonObject();
 
                 jsonProduct.add("code", product.getCode());
-                jsonProduct.add("color", getColorFor(product));
+                jsonProduct.add("color", product.getColor().toString());
 
-                if (product.getSize() != Product.SIZE_NOT_APPLICABLE) {
-                    jsonProduct.add("size", getSizeFor(product));
+                if (product.getSize() != Size.SIZE_NOT_APPLICABLE) {
+                    jsonProduct.add("size", product.getSize().toString());
                 }
 
                 jsonProduct.add("price", product.getPrice());
@@ -42,50 +40,5 @@ public class OrdersWriter {
         jsonRoot.add("orders", jsonOrders);
 
         return jsonRoot.serialize();
-    }
-
-    private String getSizeFor(Product product) {
-        switch (product.getSize()) {
-            case 1:
-                return "XS";
-            case 2:
-                return "S";
-            case 3:
-                return "M";
-            case 4:
-                return "L";
-            case 5:
-                return "XL";
-            case 6:
-                return "XXL";
-            default:
-                return "Invalid Size";
-        }
-    }
-
-    private String getColorFor(Product product) {
-        switch (product.getColor()) {
-            case 1:
-                return "blue";
-            case 2:
-                return "red";
-            case 3:
-                return "yellow";
-            default:
-                return "no color";
-        }
-    }
-
-    private String jsonKeyValue(String key, String value){
-        return String.format("\"%s\": \"%s\"", key, value);
-
-    }
-
-    private String jsonKeyValue(String key, int value){
-        return String.format("\"%s\": %d", key, value);
-    }
-
-    private String jsonKeyValue(String key, double value){
-        return String.format(Locale.US,"\"%s\": %s", key, value);
     }
 }
