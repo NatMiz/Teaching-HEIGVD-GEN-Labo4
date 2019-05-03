@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Locale;
 
-public class JsonObject {
+public class JsonObject implements Serializable {
 
     LinkedList<String> attributes = new LinkedList<>();
 
@@ -19,6 +19,10 @@ public class JsonObject {
 
     public void add(String key, double value){
         attributes.add(String.format(Locale.US,"\"%s\": %s", key, value));
+    }
+
+    public void add(String key, Serializable value){
+        attributes.add(String.format(Locale.US,"%s", value.serialize()));
     }
 
     public String serialize(){
