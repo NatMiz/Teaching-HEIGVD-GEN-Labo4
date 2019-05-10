@@ -13,22 +13,26 @@ public class OrdersWriter {
 
         for (int i = 0; i < orders.getOrdersCount(); i++) {
             Order order = orders.getOrder(i);
-            JsonObject jsonOrder = new JsonObject();
-            JsonArray jsonProducts = new JsonArray();
-            jsonOrder.add("id", order.getOrderId());
-
-            for (int j = 0; j < order.getProductsCount(); j++) {
-                Product product = order.getProduct(j);
-                jsonProducts.add(makeJsonProduct(product));
-            }
-
-            jsonOrder.add("products", jsonProducts);
-            jsonOrders.add(jsonOrder);
+            jsonOrders.add(makeJsonOrder(order));
         }
 
         jsonRoot.add("orders", jsonOrders);
 
         return jsonRoot.serialize();
+    }
+
+    public JsonObject makeJsonOrder(Order order){
+        JsonObject jsonOrder = new JsonObject();
+        JsonArray jsonProducts = new JsonArray();
+        jsonOrder.add("id", order.getOrderId());
+
+        for (int j = 0; j < order.getProductsCount(); j++) {
+            Product product = order.getProduct(j);
+            jsonProducts.add(makeJsonProduct(product));
+        }
+
+        jsonOrder.add("products", jsonProducts);
+        return jsonOrder;
     }
 
     public JsonObject makeJsonProduct(Product product){
