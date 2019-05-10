@@ -1,7 +1,6 @@
 package ch.heigvd.gen;
 
 import java.util.LinkedList;
-import java.util.Locale;
 
 public class JsonArray implements Serializable{
     LinkedList<String> values = new LinkedList<>();
