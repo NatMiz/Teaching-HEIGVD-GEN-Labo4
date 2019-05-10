@@ -19,20 +19,9 @@ public class OrdersWriter {
 
             for (int j = 0; j < order.getProductsCount(); j++) {
                 Product product = order.getProduct(j);
-                JsonObject jsonProduct = new JsonObject();
-
-                jsonProduct.add("code", product.getCode());
-                jsonProduct.add("color", product.getColor().toString());
-
-                if (product.getSize() != Size.SIZE_NOT_APPLICABLE) {
-                    jsonProduct.add("size", product.getSize().toString());
-                }
-
-                jsonProduct.add("price", product.getPrice());
-
-                jsonProduct.add("currency", product.getCurrency());
-                jsonProducts.add(jsonProduct);
+                jsonProducts.add(makeJsonProduct(product));
             }
+
             jsonOrder.add("products", jsonProducts);
             jsonOrders.add(jsonOrder);
         }
@@ -40,5 +29,22 @@ public class OrdersWriter {
         jsonRoot.add("orders", jsonOrders);
 
         return jsonRoot.serialize();
+    }
+
+    public JsonObject makeJsonProduct(Product product){
+        JsonObject jsonProduct = new JsonObject();
+
+        jsonProduct.add("code", product.getCode());
+        jsonProduct.add("color", product.getColor().toString());
+
+        if (product.getSize() != Size.SIZE_NOT_APPLICABLE) {
+            jsonProduct.add("size", product.getSize().toString());
+        }
+
+        jsonProduct.add("price", product.getPrice());
+
+        jsonProduct.add("currency", product.getCurrency());
+
+        return jsonProduct;
     }
 }
